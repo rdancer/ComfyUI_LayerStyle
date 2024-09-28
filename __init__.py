@@ -53,8 +53,16 @@ def get_ext_dir(subpath=None, mkdir=False):
 
 py = get_ext_dir("py")
 files = os.listdir(py)
+nodes_tristan_needs = [
+        # We just need these 3 nodes
+        "hl_frequency_detail_restore.py",  # LayerUtility: H/L Frequency Detail Restore
+        "color_correct_auto_adjust_v2.py", # LayerColor: AutoAdjust V2
+        "color_correct_levels.py",         # LayerColor: Levels
+]
 for file in files:
     if not file.endswith(".py"):
+        continue
+    if file not in nodes_tristan_needs:
         continue
     name = os.path.splitext(file)[0]
     imported_module = importlib.import_module(".py.{}".format(name), __name__)
