@@ -67,9 +67,25 @@ for file in files:
     name = os.path.splitext(file)[0]
     imported_module = importlib.import_module(".py.{}".format(name), __name__)
     try:
-        NODE_CLASS_MAPPINGS = {**NODE_CLASS_MAPPINGS, **imported_module.NODE_CLASS_MAPPINGS}
-        NODE_DISPLAY_NAME_MAPPINGS = {**NODE_DISPLAY_NAME_MAPPINGS, **imported_module.NODE_DISPLAY_NAME_MAPPINGS}
+        # To be able to install and use alongside the upstream package, give a unique prefix, and give the display names a unique suffix and emoji
+        NODE_CLASS_MAPPINGS = { 
+            **NODE_CLASS_MAPPINGS,
+            **{f"Rdancer_{key}": value for key, value in imported_module.NODE_CLASS_MAPPINGS.items()}
+        }   
+        NODE_DISPLAY_NAME_MAPPINGS = { 
+            **NODE_DISPLAY_NAME_MAPPINGS,
+            **{f"Rdancer_{key}": f"{value} (Lite 💃)" for key, value in imported_module.NODE_DISPLAY_NAME_MAPPINGS.items()}
+        }   
     except:
         pass
+
+# Print NODE_CLASS_MAPPINGS for debugging
+print("Updated NODE_CLASS_MAPPINGS:")
+for key, value in NODE_CLASS_MAPPINGS.items():
+    print(f"{key}: {value}")
+# Print NODE_DISPLAY_NAME_MAPPINGS for debugging
+print("\nUpdated NODE_DISPLAY_NAME_MAPPINGS:")
+for key, value in NODE_DISPLAY_NAME_MAPPINGS.items():
+    print(f"{key}: {value}")
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
